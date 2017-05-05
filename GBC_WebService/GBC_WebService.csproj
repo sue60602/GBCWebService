@@ -111,12 +111,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GBC_WebService.asmx" />
+    <Content Include="GBCWebService.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GBC_WebService.asmx.cs">
-      <DependentUpon>GBC_WebService.asmx</DependentUpon>
+    <Compile Include="GBCWebService.asmx.cs">
+      <DependentUpon>GBCWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
