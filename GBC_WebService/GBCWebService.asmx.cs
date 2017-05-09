@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Services;
+using GBC_WebService;
 
 namespace GBC_WebService
 {
@@ -27,6 +28,7 @@ namespace GBC_WebService
         }
 
         Vw_GBCVisaDetailDAO dao = new Vw_GBCVisaDetailDAO();
+        GBCAbateDAO abateDAO = new GBCAbateDAO();
 
         [WebMethod]
         //JSON單筆測試

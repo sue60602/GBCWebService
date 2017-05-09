@@ -115,9 +115,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Code\GBCAbateVO.cs" />
-    <Content Include="App_Code\GBCAbate_Interface.cs" />
-    <Content Include="App_Code\GBCAbateDAO.cs" />
+    <Compile Include="App_Code\GBCAbateDAO.cs" />
+    <Compile Include="App_Code\GBCAbateVO.cs" />
+    <Compile Include="App_Code\GBCAbate_Interface.cs" />
     <Compile Include="GBCWebService.asmx.cs">
       <DependentUpon>GBCWebService.asmx</DependentUpon>
       <SubType>Component</SubType>

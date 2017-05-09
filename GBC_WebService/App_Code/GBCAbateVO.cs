@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace GBC_WebService.App_Code
+namespace GBC_WebService
 {
     public class GBCAbateVO
     {

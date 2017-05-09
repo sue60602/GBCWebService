@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 
-namespace GBC_WebService.App_Code
+namespace GBC_WebService
 {
     public class GBCAbateDAO : GBCAbate_Interface
     {
