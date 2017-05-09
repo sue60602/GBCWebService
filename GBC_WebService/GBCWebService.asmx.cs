@@ -30,7 +30,7 @@ namespace GBC_WebService
 
         [WebMethod]
         //JSON單筆測試
-        public string getVw_GBCVisaDetail(string acmWordNum)
+        public string GetVw_GBCVisaDetail(string acmWordNum)
         {
 
             Vw_GBCVisaDetailVO vw_GBCVisaDetailVO = dao.findViewByAcmWordNum(acmWordNum);
@@ -62,7 +62,7 @@ namespace GBC_WebService
 
         [WebMethod]
         //XML單筆測試
-        public Vw_GBCVisaDetail[] getVw_GBCVisaDetailXML(string acmWordNum)
+        public Vw_GBCVisaDetail[] GetVw_GBCVisaDetailXML(string acmWordNum)
         {
 
             Vw_GBCVisaDetailVO vw_GBCVisaDetailVO = dao.findViewByAcmWordNum(acmWordNum);
@@ -94,7 +94,7 @@ namespace GBC_WebService
 
         [WebMethod]
         //JSON集合
-        public string getVw_GBCVisaDetailJSON(string acmWordNum)
+        public string GetVw_GBCVisaDetailJSON(string acmWordNum)
         {
             acmWordNum = acmWordNum.Trim(); //去空白
             acmWordNum = acmWordNum.Replace("*", ""); //去掉"*"字號
@@ -141,6 +141,15 @@ namespace GBC_WebService
             return JsonConvert.SerializeObject(view);
         }
 
+        [WebMethod]
+        //回填傳票號碼
+        public string FillVouNo()
+        {
+
+            return "xxx";
+        }
+
+        //=================手動選取資料=================
         [WebMethod]
         //取年度
         public List<string> GetYear()
