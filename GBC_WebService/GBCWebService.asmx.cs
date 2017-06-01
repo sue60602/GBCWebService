@@ -145,32 +145,22 @@ namespace GBC_WebService
 
         [WebMethod]
         //回填傳票號碼
-        public string FillVouNo(string fillVouJSON)
+        public string FillVouNo(List<GBCVisaDetailAbateDetailVO> fillVouList)
         {
-            //string PK_會計年度, string PK_動支編號, string PK_種類, string PK_次別, string PK_明細號, string F_金額, string F_製票號, string F_製票日期
-            //List<GBCAbateVO> gbcAbateVOList = new List<GBCAbateVO>();
             GBCAbateVO gbcAbateVO = new GBCAbateVO();
-            List<FillVouScript> fillVouScriptList = new List<FillVouScript>();
-            try
-            {
-                fillVouScriptList = JsonConvert.DeserializeObject<List<FillVouScript>>(fillVouJSON);  //反序列化JSON
-            }
-            catch (Exception e)
-            {
-                return e.StackTrace;
-            }
+            List<GBCVisaDetailAbateDetailVO> gbcisaDetailAbateDetailVOList = new List<GBCVisaDetailAbateDetailVO>();
 
-            foreach (var fillVouScriptListItem in fillVouScriptList)
+            foreach (var gbcisaDetailAbateDetailVOListItem in gbcisaDetailAbateDetailVOList)
             {
-                gbcAbateVO.PK_會計年度 = fillVouScriptListItem.會計年度;
-                gbcAbateVO.PK_動支編號 = fillVouScriptListItem.動支編號;
-                gbcAbateVO.PK_種類 = fillVouScriptListItem.種類;
-                gbcAbateVO.PK_次別 = fillVouScriptListItem.次別;
-                gbcAbateVO.PK_明細號 = fillVouScriptListItem.明細號;
-                gbcAbateVO.F_製票號 = fillVouScriptListItem.傳票號;
-                gbcAbateVO.F_製票日期 = fillVouScriptListItem.製票日期;
-                gbcAbateVO.F_過帳號 = fillVouScriptListItem.傳票號;
-                gbcAbateVO.F_過帳日期 = fillVouScriptListItem.製票日期;
+                gbcAbateVO.PK_會計年度 = gbcisaDetailAbateDetailVOListItem.getPK_會計年度();
+                gbcAbateVO.PK_動支編號 = gbcisaDetailAbateDetailVOListItem.getPK_動支編號();
+                gbcAbateVO.PK_種類 = gbcisaDetailAbateDetailVOListItem.getPK_種類();
+                gbcAbateVO.PK_次別 = gbcisaDetailAbateDetailVOListItem.getPK_次別();
+                gbcAbateVO.PK_明細號 = gbcisaDetailAbateDetailVOListItem.getPK_明細號();
+                gbcAbateVO.F_製票號 = gbcisaDetailAbateDetailVOListItem.getF_傳票號1();
+                gbcAbateVO.F_製票日期 = gbcisaDetailAbateDetailVOListItem.getF_製票日期1();
+                gbcAbateVO.F_過帳號 = gbcisaDetailAbateDetailVOListItem.getF_傳票號1();
+                gbcAbateVO.F_過帳日期 = gbcisaDetailAbateDetailVOListItem.getF_製票日期1();
 
                 abateDAO.Delete(gbcAbateVO);
                 abateDAO.Insert(gbcAbateVO);
