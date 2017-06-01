@@ -118,7 +118,7 @@
     <Compile Include="App_Code\GBCAbateDAO.cs" />
     <Compile Include="App_Code\GBCAbateVO.cs" />
     <Compile Include="App_Code\GBCAbate_Interface.cs" />
-    <Compile Include="GBCVisaDetailAbateDetailVO.cs" />
+    <Compile Include="App_Code\GBCVisaDetailAbateDetailVO.cs" />
     <Compile Include="GBCWebService.asmx.cs">
       <DependentUpon>GBCWebService.asmx</DependentUpon>
       <SubType>Component</SubType>

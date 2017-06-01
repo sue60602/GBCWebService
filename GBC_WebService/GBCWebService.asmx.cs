@@ -148,19 +148,19 @@ namespace GBC_WebService
         public string FillVouNo(List<GBCVisaDetailAbateDetailVO> fillVouList)
         {
             GBCAbateVO gbcAbateVO = new GBCAbateVO();
-            List<GBCVisaDetailAbateDetailVO> gbcisaDetailAbateDetailVOList = new List<GBCVisaDetailAbateDetailVO>();
+            List<GBCVisaDetailAbateDetailVO> gbcVisaDetailAbateDetailVOList = new List<GBCVisaDetailAbateDetailVO>();
 
-            foreach (var gbcisaDetailAbateDetailVOListItem in gbcisaDetailAbateDetailVOList)
+            foreach (var gbcVisaDetailAbateDetailVOListItem in gbcVisaDetailAbateDetailVOList)
             {
-                gbcAbateVO.PK_會計年度 = gbcisaDetailAbateDetailVOListItem.getPK_會計年度();
-                gbcAbateVO.PK_動支編號 = gbcisaDetailAbateDetailVOListItem.getPK_動支編號();
-                gbcAbateVO.PK_種類 = gbcisaDetailAbateDetailVOListItem.getPK_種類();
-                gbcAbateVO.PK_次別 = gbcisaDetailAbateDetailVOListItem.getPK_次別();
-                gbcAbateVO.PK_明細號 = gbcisaDetailAbateDetailVOListItem.getPK_明細號();
-                gbcAbateVO.F_製票號 = gbcisaDetailAbateDetailVOListItem.getF_傳票號1();
-                gbcAbateVO.F_製票日期 = gbcisaDetailAbateDetailVOListItem.getF_製票日期1();
-                gbcAbateVO.F_過帳號 = gbcisaDetailAbateDetailVOListItem.getF_傳票號1();
-                gbcAbateVO.F_過帳日期 = gbcisaDetailAbateDetailVOListItem.getF_製票日期1();
+                gbcAbateVO.PK_會計年度 = gbcVisaDetailAbateDetailVOListItem.getPK_會計年度();
+                gbcAbateVO.PK_動支編號 = gbcVisaDetailAbateDetailVOListItem.getPK_動支編號();
+                gbcAbateVO.PK_種類 = gbcVisaDetailAbateDetailVOListItem.getPK_種類();
+                gbcAbateVO.PK_次別 = gbcVisaDetailAbateDetailVOListItem.getPK_次別();
+                gbcAbateVO.PK_明細號 = gbcVisaDetailAbateDetailVOListItem.getPK_明細號();
+                gbcAbateVO.F_製票號 = gbcVisaDetailAbateDetailVOListItem.getF_傳票號1();
+                gbcAbateVO.F_製票日期 = gbcVisaDetailAbateDetailVOListItem.getF_製票日期1();
+                gbcAbateVO.F_過帳號 = gbcVisaDetailAbateDetailVOListItem.getF_傳票號1();
+                gbcAbateVO.F_過帳日期 = gbcVisaDetailAbateDetailVOListItem.getF_製票日期1();
 
                 abateDAO.Delete(gbcAbateVO);
                 abateDAO.Insert(gbcAbateVO);
