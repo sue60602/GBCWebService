@@ -18,7 +18,7 @@ namespace GBC_WebService
         public string F_金額 { get; set; }
         public string F_編修狀態 { get; set; }
         public string F_編修人員 { get; set; }
-        public string F_編修時間 { get; set; }
+        public DateTime F_編修時間 { get; set; }
         public string F_製票號 { get; set; }
         public string F_製票日期 { get; set; }
         public string F_過帳號 { get; set; }

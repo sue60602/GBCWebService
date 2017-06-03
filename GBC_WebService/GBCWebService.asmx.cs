@@ -145,26 +145,34 @@ namespace GBC_WebService
 
         [WebMethod]
         //回填傳票號碼
-        public string FillVouNo(List<GBCVisaDetailAbateDetailVO> fillVouList)
+        public string FillVouNo(string accYear, string acmWordNum, string accKind, string accCount, string accDetail, string vouNo, string vouDate, string passNo, string passDate)
         {
             GBCAbateVO gbcAbateVO = new GBCAbateVO();
-            List<GBCVisaDetailAbateDetailVO> gbcVisaDetailAbateDetailVOList = new List<GBCVisaDetailAbateDetailVO>();
+            //List<GBCVisaDetailAbateDetailVO> gbcVisaDetailAbateDetailVOList = new List<GBCVisaDetailAbateDetailVO>();
 
-            foreach (var gbcVisaDetailAbateDetailVOListItem in gbcVisaDetailAbateDetailVOList)
+            gbcAbateVO.PK_會計年度 = accYear;
+            gbcAbateVO.PK_動支編號 = acmWordNum;
+            gbcAbateVO.PK_種類 = accKind;
+            gbcAbateVO.PK_次別 = accCount;
+            gbcAbateVO.PK_明細號 = accDetail;
+            gbcAbateVO.F_製票號 = vouNo;
+            gbcAbateVO.F_製票日期 = vouDate;
+            gbcAbateVO.F_過帳號 = passNo;
+            gbcAbateVO.F_過帳日期 = passDate;
+            gbcAbateVO.F_編修時間 = DateTime.Now;
+
+            if (accKind.Equals("核銷") && vouNo.Substring(0,1) == "4")
             {
-                gbcAbateVO.PK_會計年度 = gbcVisaDetailAbateDetailVOListItem.getPK_會計年度();
-                gbcAbateVO.PK_動支編號 = gbcVisaDetailAbateDetailVOListItem.getPK_動支編號();
-                gbcAbateVO.PK_種類 = gbcVisaDetailAbateDetailVOListItem.getPK_種類();
-                gbcAbateVO.PK_次別 = gbcVisaDetailAbateDetailVOListItem.getPK_次別();
-                gbcAbateVO.PK_明細號 = gbcVisaDetailAbateDetailVOListItem.getPK_明細號();
-                gbcAbateVO.F_製票號 = gbcVisaDetailAbateDetailVOListItem.getF_傳票號1();
-                gbcAbateVO.F_製票日期 = gbcVisaDetailAbateDetailVOListItem.getF_製票日期1();
-                gbcAbateVO.F_過帳號 = gbcVisaDetailAbateDetailVOListItem.getF_傳票號1();
-                gbcAbateVO.F_過帳日期 = gbcVisaDetailAbateDetailVOListItem.getF_製票日期1();
-
-                abateDAO.Delete(gbcAbateVO);
-                abateDAO.Insert(gbcAbateVO);
+                gbcAbateVO.PK_沖銷傳票種類 = "8";
             }
+            else
+            {
+                gbcAbateVO.PK_沖銷傳票種類 = "";
+            }
+
+            abateDAO.Delete(gbcAbateVO);
+            abateDAO.Insert(gbcAbateVO);
+
 
             return "xxx";
         }
