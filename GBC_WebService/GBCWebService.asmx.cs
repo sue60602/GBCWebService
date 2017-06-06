@@ -106,6 +106,10 @@ namespace GBC_WebService
             List<Vw_GBCVisaDetailVO> vw_GBCVisaDetailVO = dao.getAll(acmWordNum);
             List<Vw_GBCVisaDetail> view = new List<Vw_GBCVisaDetail>();
 
+            if (vw_GBCVisaDetailVO.Count==0)
+            {
+                return acmWordNum + "..查無此資料可就源，請確認是否已審核";
+            }
             if (match.Success)
             {
                 foreach (var item in vw_GBCVisaDetailVO)

@@ -137,9 +137,11 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
                 break;
         }
         string acmNo = strs[2];
+     
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["SqlDbConnStr"].ConnectionString);
         SqlCommand com = new SqlCommand(GET_ONE_STMT, con);
-        com.Parameters.AddWithValue("@PK_會計年度", acmWordNumOut.Substring(0, 3));
+        //com.Parameters.AddWithValue("@PK_會計年度", acmWordNumOut.Substring(0, 3));
+        com.Parameters.AddWithValue("@PK_會計年度", DateTime.Now.Year - 1911);
         com.Parameters.AddWithValue("@acmWordNum", acmWordNumOut);
         com.Parameters.AddWithValue("@acmKind", acmKind);
         com.Parameters.AddWithValue("@acmNo", acmNo);
@@ -179,9 +181,8 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
         }
 
         con.Close();
-        return list;
 
-        throw new Exception();
+        return list;
     }
 
     //取年度
