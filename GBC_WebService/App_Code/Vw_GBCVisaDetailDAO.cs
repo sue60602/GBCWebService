@@ -329,12 +329,12 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
     }
 
     //取估列資料
-    public List<Vw_GBCVisaDetailVO> GetEstimate(string accYear, string accKind, string batch)
+    public List<string> GetByKind(string accYear, string accKind, string batch)
     {
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["SqlDbConnStr"].ConnectionString);
         SqlCommand com = new SqlCommand(GET_ESTIMATE_STMT, con);
-        List<Vw_GBCVisaDetailVO> list = new List<Vw_GBCVisaDetailVO>();
-        Vw_GBCVisaDetailVO vw_GBCVisaDetailVO = null;
+        List<string> list = new List<string>();
+        //Vw_GBCVisaDetailVO vw_GBCVisaDetailVO = null;
 
         con.Open();
         com.Parameters.AddWithValue("@PK_會計年度", accYear);
@@ -345,34 +345,7 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
 
         while (dr.Read())
         {
-            vw_GBCVisaDetailVO = new Vw_GBCVisaDetailVO();
-            vw_GBCVisaDetailVO.set基金代碼(dr["基金代碼"].ToString());
-            vw_GBCVisaDetailVO.setPK_會計年度(dr["PK_會計年度"].ToString());
-            vw_GBCVisaDetailVO.setPK_動支編號(dr["PK_動支編號"].ToString());
-            vw_GBCVisaDetailVO.setPK_種類(dr["PK_種類"].ToString());
-            vw_GBCVisaDetailVO.setPK_次別(dr["PK_次別"].ToString());
-            vw_GBCVisaDetailVO.setPK_明細號(dr["PK_明細號"].ToString());
-            vw_GBCVisaDetailVO.setF_科室代碼(dr["F_科室代碼"].ToString());
-            vw_GBCVisaDetailVO.setF_用途別代碼((dr["F_用途別代碼"].ToString()).Substring(2));
-            if ((dr["F_計畫代碼"].ToString()).Length > 2)
-            {
-                vw_GBCVisaDetailVO.setF_計畫代碼((dr["F_計畫代碼"].ToString()).Substring(7));
-            }
-            else
-            {
-                vw_GBCVisaDetailVO.setF_計畫代碼(dr["F_計畫代碼"].ToString());
-            }
-            vw_GBCVisaDetailVO.setF_動支金額(dr["F_動支金額"].ToString());
-            vw_GBCVisaDetailVO.setF_製票日(dr["F_製票日"].ToString());
-            vw_GBCVisaDetailVO.setF_是否核定(dr["F_是否核定"].ToString());
-            vw_GBCVisaDetailVO.setF_核定金額(dr["F_核定金額"].ToString());
-            vw_GBCVisaDetailVO.setF_核定日期(dr["F_核定日期"].ToString());
-            vw_GBCVisaDetailVO.setF_摘要(dr["F_摘要"].ToString());
-            vw_GBCVisaDetailVO.setF_受款人(dr["F_受款人"].ToString());
-            vw_GBCVisaDetailVO.setF_受款人編號(dr["F_受款人編號"].ToString());
-            vw_GBCVisaDetailVO.setF_原動支編號(dr["F_原動支編號"].ToString());
-            vw_GBCVisaDetailVO.setF_批號(dr["F_批號"].ToString());
-            list.Add(vw_GBCVisaDetailVO);
+            list.Add(dr["基金代碼"].ToString() + "," + dr["PK_會計年度"].ToString() + "," + dr["PK_動支編號"].ToString() + "," + dr["PK_種類"].ToString() + "," + dr["PK_次別"].ToString() + "," + dr["PK_明細號"].ToString() + "," + dr["F_科室代碼"].ToString() + "," + dr["F_用途別代碼"].ToString() + "," + dr["F_計畫代碼"].ToString() + "," + dr["F_動支金額"].ToString() + "," + dr["F_製票日"].ToString() + "," + dr["F_摘要"].ToString() + "," + dr["F_受款人"].ToString() + "," + dr["F_受款人編號"].ToString());
         }
 
         con.Close();

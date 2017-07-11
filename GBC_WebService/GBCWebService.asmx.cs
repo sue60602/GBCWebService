@@ -276,40 +276,13 @@ namespace GBC_WebService
         }
 
         [WebMethod]
-        //依據所有KEY值取View
-        public string GetEstimate(string accYear,string accKind, string batch)
+        //取種類View
+        public List<string> GetByKind(string accYear, string accKind, string batch)
         {
-            List<Vw_GBCVisaDetailVO> vw_GBCVisaDetailVO = dao.GetEstimate(accYear, accKind, batch);
-            List<Vw_GBCVisaDetail> view = new List<Vw_GBCVisaDetail>();
+            List<string> vw_GBCVisaDetailVO = dao.GetByKind(accYear, accKind, batch);
 
-            foreach (var item in vw_GBCVisaDetailVO)
-            {
-                view.Add(
-                    new Vw_GBCVisaDetail()
-                    {
-                        基金代碼 = item.get基金代碼(),
-                        PK_會計年度 = item.getPK_會計年度(),
-                        PK_動支編號 = item.getPK_動支編號(),
-                        PK_種類 = item.getPK_種類(),
-                        PK_次別 = item.getPK_次別(),
-                        PK_明細號 = item.getPK_明細號(),
-                        F_科室代碼 = item.getF_科室代碼(),
-                        F_用途別代碼 = item.getF_用途別代碼(),
-                        F_計畫代碼 = item.getF_計畫代碼(),
-                        F_動支金額 = item.getF_動支金額(),
-                        F_製票日 = item.getF_製票日(),
-                        F_是否核定 = item.getF_是否核定(),
-                        F_核定金額 = item.getF_核定金額(),
-                        F_核定日期 = item.getF_核定日期(),
-                        F_摘要 = item.getF_摘要(),
-                        F_受款人 = item.getF_受款人(),
-                        F_受款人編號 = item.getF_受款人編號(),
-                        F_批號 = item.getF_批號()
-                    }
-                );
-            }
-
-            return JsonConvert.SerializeObject(view);
+            return vw_GBCVisaDetailVO;
         }
+
     }
 }
