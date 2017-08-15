@@ -12,7 +12,10 @@ using System.Web.Configuration;
 public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
 {
     private const string GET_ONE_STMT =
-        "SELECT  [基金代碼],[PK_會計年度],[PK_動支編號],[PK_種類],[PK_次別],[PK_明細號],[F_科室代碼],[F_用途別代碼],[F_計畫代碼],[F_動支金額],[F_製票日],[F_是否核定],[F_核定金額],[F_核定日期],[F_摘要],[F_受款人],[F_受款人編號],[F_原動支編號],[F_批號] FROM GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_動支編號 = @acmWordNum  and PK_種類=@acmKind and PK_次別=@acmNo";
+        "SELECT  [基金代碼],[PK_會計年度],[PK_動支編號],[PK_種類],[PK_次別],[PK_明細號],[F_科室代碼],[F_用途別代碼],[F_計畫代碼],[F_動支金額],[F_製票日],[F_是否核定],[F_核定金額],[F_核定日期],[F_摘要],[F_受款人],[F_受款人編號],[F_原動支編號],[F_批號],[F_原動支編號] FROM GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_動支編號 = @acmWordNum  and PK_種類=@acmKind and PK_次別=@acmNo";
+
+    private const string GET_ONE_STMT_BY_ORINGINAL =
+        "SELECT  [基金代碼],[PK_會計年度],[PK_動支編號],[PK_種類],[PK_次別],[PK_明細號],[F_科室代碼],[F_用途別代碼],[F_計畫代碼],[F_動支金額],[F_製票日],[F_是否核定],[F_核定金額],[F_核定日期],[F_摘要],[F_受款人],[F_受款人編號],[F_原動支編號],[F_批號],[F_原動支編號] FROM GBCVisaDetail where PK_會計年度=@PK_會計年度 and F_原動支編號 = @acmWordNum  and PK_種類=@acmKind and PK_次別=@acmNo";
 
     private const string GET_YEAR_STMT =
         "SELECT DISTINCT PK_會計年度 FROM GBCVisaDetail order by PK_會計年度 desc";
@@ -30,10 +33,10 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
     "SELECT DISTINCT PK_明細號 FROM GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_動支編號=@PK_動支編號 and PK_種類=@PK_種類 and PK_次別=@PK_次別";
 
     private const string GET_BY_PK_STMT =
-    "SELECT [基金代碼],[PK_會計年度],[PK_動支編號],[PK_種類],[PK_次別],[PK_明細號],[F_科室代碼],[F_用途別代碼],[F_計畫代碼],[F_動支金額],[F_製票日],[F_是否核定],[F_核定金額],[F_核定日期],[F_摘要],[F_受款人],[F_受款人編號],[F_原動支編號],[F_批號] FROM GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_動支編號=@PK_動支編號 and PK_種類=@PK_種類 and PK_次別=@PK_次別 and PK_明細號=@PK_明細號";
+    "SELECT [基金代碼],[PK_會計年度],[PK_動支編號],[PK_種類],[PK_次別],[PK_明細號],[F_科室代碼],[F_用途別代碼],[F_計畫代碼],[F_動支金額],[F_製票日],[F_是否核定],[F_核定金額],[F_核定日期],[F_摘要],[F_受款人],[F_受款人編號],[F_原動支編號],[F_批號],[F_原動支編號] FROM GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_動支編號=@PK_動支編號 and PK_種類=@PK_種類 and PK_次別=@PK_次別 and PK_明細號=@PK_明細號";
 
     private const string GET_ESTIMATE_STMT =
-    "SELECT [基金代碼],[PK_會計年度],[PK_動支編號],[PK_種類],[PK_次別],[PK_明細號],[F_科室代碼],[F_用途別代碼],[F_計畫代碼],[F_動支金額],[F_製票日],[F_是否核定],[F_核定金額],[F_核定日期],[F_摘要],[F_受款人],[F_受款人編號],[F_原動支編號],[F_批號] FROM GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_種類=@PK_種類 and F_批號=@F_批號";
+    "select distinct 基金代碼,PK_會計年度,PK_動支編號,PK_種類,PK_次別 from GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_種類=@PK_種類 and F_批號=@F_批號 ";
 
     //測試用(找單筆)
     public Vw_GBCVisaDetailVO findViewByAcmWordNum(string acmWordNum)
@@ -140,9 +143,20 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
                 break;
         }
         string acmNo = strs[2];
-     
+         
+
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["SqlDbConnStr"].ConnectionString);
-        SqlCommand com = new SqlCommand(GET_ONE_STMT, con);
+        SqlCommand com = null;
+
+        if (int.Parse(acmWordNumOut.Substring(0, 3)) < DateTime.Now.Year - 1911)
+        {
+            com = new SqlCommand(GET_ONE_STMT_BY_ORINGINAL, con);
+        }
+        else
+        {
+            com = new SqlCommand(GET_ONE_STMT, con);
+        }
+         
         //com.Parameters.AddWithValue("@PK_會計年度", acmWordNumOut.Substring(0, 3));
         com.Parameters.AddWithValue("@PK_會計年度", DateTime.Now.Year - 1911);
         com.Parameters.AddWithValue("@acmWordNum", acmWordNumOut);
@@ -334,7 +348,7 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
         SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["SqlDbConnStr"].ConnectionString);
         SqlCommand com = new SqlCommand(GET_ESTIMATE_STMT, con);
         List<string> list = new List<string>();
-        //Vw_GBCVisaDetailVO vw_GBCVisaDetailVO = null;
+        string kindNo = "";
 
         con.Open();
         com.Parameters.AddWithValue("@PK_會計年度", accYear);
@@ -345,7 +359,26 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
 
         while (dr.Read())
         {
-            list.Add(dr["基金代碼"].ToString() + "," + dr["PK_會計年度"].ToString() + "," + dr["PK_動支編號"].ToString() + "," + dr["PK_種類"].ToString() + "," + dr["PK_次別"].ToString() + "," + dr["PK_明細號"].ToString() + "," + dr["F_科室代碼"].ToString() + "," + dr["F_用途別代碼"].ToString() + "," + dr["F_計畫代碼"].ToString() + "," + dr["F_動支金額"].ToString() + "," + dr["F_製票日"].ToString() + "," + dr["F_摘要"].ToString() + "," + dr["F_受款人"].ToString() + "," + dr["F_受款人編號"].ToString());
+            kindNo = dr["PK_種類"].ToString();
+            switch (kindNo)
+            {
+                case "估列":
+                    kindNo = "3";
+                    break;
+                case "估列收回":
+                    kindNo = "4";
+                    break;
+                case "預撥收回":
+                    kindNo = "5";
+                    break;
+                case "核銷收回":
+                    kindNo = "6";
+                    break;
+                default:
+                    kindNo = "0";
+                    break;
+            }
+            list.Add(dr["PK_動支編號"].ToString() + "-" + kindNo + "-" + dr["PK_次別"].ToString());
         }
 
         con.Close();

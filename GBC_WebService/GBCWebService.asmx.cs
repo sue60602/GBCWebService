@@ -134,7 +134,8 @@ namespace GBC_WebService
                             F_摘要 = item.getF_摘要(),
                             F_受款人 = item.getF_受款人(),
                             F_受款人編號 = item.getF_受款人編號(),
-                            F_批號 = item.getF_批號()
+                            F_批號 = item.getF_批號(),
+                            F_原動支編號 = item.getF_原動支編號()
                         }
                     );
                 }

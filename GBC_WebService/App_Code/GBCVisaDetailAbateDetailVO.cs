@@ -22,6 +22,7 @@ namespace GBC_WebService
         private string F_製票日期1;
         private string F_製票日期2;
         private string PK_明細號;
+        private string F_原動支編號;
 
 
         public string getF_金額()
@@ -99,6 +100,11 @@ namespace GBC_WebService
             return 基金代碼;
         }
 
+        public string getF_原動支編號()
+        {
+            return F_原動支編號;
+        }
+
         public void setF_核定金額(string f_核定金額)
         {
             F_核定金額 = f_核定金額;
@@ -172,6 +178,11 @@ namespace GBC_WebService
         public void set基金代碼(string 基金代碼)
         {
             this.基金代碼 = 基金代碼;
+        }
+
+        public void setF_原動支編號(string F_原動支編號)
+        {
+            this.F_原動支編號 = F_原動支編號;
         }
     }
 }
