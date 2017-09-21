@@ -38,6 +38,9 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
     private const string GET_ESTIMATE_STMT =
     "select distinct 基金代碼,PK_會計年度,PK_動支編號,PK_種類,PK_次別 from GBCVisaDetail where PK_會計年度=@PK_會計年度 and PK_種類=@PK_種類 and F_批號=@F_批號 ";
 
+    private const string IS_ORIGINAL_STMT =
+    "select count(*) as cnt from GBCVisaDetail where PK_會計年度=@PK_會計年度 and F_原動支編號=@F_原動支編號";
+
     //測試用(找單筆)
     public Vw_GBCVisaDetailVO findViewByAcmWordNum(string acmWordNum)
     {
@@ -150,7 +153,15 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
 
         if (int.Parse(acmWordNumOut.Substring(0, 3)) < DateTime.Now.Year - 1911)
         {
-            com = new SqlCommand(GET_ONE_STMT_BY_ORINGINAL, con);
+            if (isOrigNum(acmWordNumOut)>0)
+            {
+                com = new SqlCommand(GET_ONE_STMT_BY_ORINGINAL, con);
+            }
+            else
+            {
+                com = new SqlCommand(GET_ONE_STMT, con);
+            }
+            
         }
         else
         {
@@ -200,6 +211,24 @@ public class Vw_GBCVisaDetailDAO : Vw_GBCVisaDetail_Interface
         con.Close();
 
         return list;
+    }
+
+    //原動支欄位是否存在
+    public int isOrigNum(string acmWordNum)
+    {
+        SqlConnection con = new SqlConnection(WebConfigurationManager.ConnectionStrings["SqlDbConnStr"].ConnectionString);
+        SqlCommand com = null;
+
+        com = new SqlCommand(IS_ORIGINAL_STMT, con);
+
+        com.Parameters.AddWithValue("@PK_會計年度", DateTime.Now.Year - 1911);
+        com.Parameters.AddWithValue("@F_原動支編號", acmWordNum);
+
+        con.Open();
+
+        int cnt = int.Parse(com.ExecuteScalar().ToString());
+
+        return cnt;
     }
 
     //取年度
