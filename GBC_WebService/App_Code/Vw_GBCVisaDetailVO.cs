@@ -27,6 +27,9 @@ public class Vw_GBCVisaDetailVO
     private string F_受款人編號;
     private string F_原動支編號;
     private string F_批號;
+    private string 實支;
+    private string 預付轉正;
+    private string 沖抵估列;
 
     public string get基金代碼()
     {
@@ -180,7 +183,30 @@ public class Vw_GBCVisaDetailVO
     {
         F_批號 = f_批號;
     }
-
+    public string get實支()
+    {
+        return 實支;
+    }
+    public void set實支(string 實支)
+    {
+        this.實支 = 實支;
+    }
+    public string get預付轉正()
+    {
+        return 預付轉正;
+    }
+    public void set預付轉正(string 預付轉正)
+    {
+        this.預付轉正 = 預付轉正;
+    }
+    public string get沖抵估列()
+    {
+        return 沖抵估列;
+    }
+    public void set沖抵估列(string 沖抵估列)
+    {
+        this.沖抵估列 = 沖抵估列;
+    }
 
 
 }

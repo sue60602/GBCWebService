@@ -43,6 +43,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -80,6 +84,9 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -98,9 +105,26 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EF\GBCModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GBCModel.edmx</DependentUpon>
+      <LastGenOutput>GBCModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EF\GBCModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GBCModel.edmx</DependentUpon>
+      <LastGenOutput>GBCModel.cs</LastGenOutput>
+    </Content>
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EntityDeploy Include="EF\GBCModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GBCModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="EF\GBCModel.edmx.diagram">
+      <DependentUpon>GBCModel.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\GBC_WebService.pubxml" />
     <None Include="Web.Debug.config">
@@ -119,6 +143,372 @@
     <Compile Include="App_Code\GBCAbateVO.cs" />
     <Compile Include="App_Code\GBCAbate_Interface.cs" />
     <Compile Include="App_Code\GBCVisaDetailAbateDetailVO.cs" />
+    <Compile Include="EF\Acc_01_dbo_Y104_VisaNewMainNo.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\actAccCode.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\actAccCode_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\actMain.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\actMain_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\basBaseData.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\basBaseData_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\basPayName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\basPayName_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\basPhrase.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\basPhrase_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\bgtBudget.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\bgtBudgetSet.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\bgtBudgetSet_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\bgtBudget_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\bgtMonth.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\bgtMonth_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\CGSSLogDistinct.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\chkActBgtCode.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\chkActBgtCode_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\chkActPlanRole.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codAccKindName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codAccKindName_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codBgtOrigin.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codBizName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codBizName_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codDepartName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codDepartName_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codDepBiz.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codDepBiz_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codFD_BaseMenu.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codFormulaDesc.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codKind.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codOutlayCode.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codOutlayCodePN.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codOutlayCodePN_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codOutlayCode_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codPlanCategory.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codPlanCategory_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codPlanCode.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codPlanCodePN.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codPlanCodePN_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codPlanCode_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codSubsidyCatName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codSubsidyOutlayRole.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codSysPara.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codTeamName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codTeamName_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\codTrlMember.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ebsAgent.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\ebsAgent_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\GBCModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GBCModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\GBCModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\GBCModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GBCModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EF\GBCVisaDetail.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\logWhoRec.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysBaseUser.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysBaseUser_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysGroupData.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysGroupData_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysGroupName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysGroupName_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysMenuBase.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysMenuBase_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysUserPower.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\sysUserPower_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbApply.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbApplyDtl.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbApplyDtl_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbApply_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbCity.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbCityArea.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbDecide.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbDecideDtl.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbDecideDtl_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbDecide_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbEstimate.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbEstimateOverAgainst.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbEstimateOverAgainst_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbEstimateTranBatch.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbEstimateTranBatchDtl.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbEstimate_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbFee.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbFeePlanCode.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbficEntrustFiles.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbInspect.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbInterestData.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMemo.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMemo_tsbYear_tsbMemoNo_Inc.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMHWAnnualRptFinal.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMHWAnnualRptFinal_tsbYear_tsbMHWAnRptFinalNo_Inc.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMHWAnnualRptImport.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMHWEstImport.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMHWMonthlyRptImport.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbMHWSeasonRptImport.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbOpenEstimateSetting.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPay.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayDtl.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayDtl_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayee.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayee1.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayeeGroupData.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayeeGroupName.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayeePayee1REL.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayeeProperty.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayeeRole.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPayOffset.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPay_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPrePay.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPrePayDtl.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPrePayDtl_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbPrePay_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbReceipt.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbReceipt_Log.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbRptInputDataDtl.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbRptInputDataM.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbTransfer.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbTrlReportInput.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\tsbUnfinishCause.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EF\vw_GBCVisaDetailWithAbate.cs">
+      <DependentUpon>GBCModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GBCWebService.asmx.cs">
       <DependentUpon>GBCWebService.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -128,6 +518,9 @@
     <Compile Include="App_Code\Vw_GBCVisaDetailDAO.cs" />
     <Compile Include="App_Code\Vw_GBCVisaDetailVO.cs" />
     <Compile Include="App_Code\Vw_GBCVisaDetail_Interface.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

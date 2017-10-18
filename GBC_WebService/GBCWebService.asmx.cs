@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Services;
 using GBC_WebService;
+using GBC_WebService.EF;
 
 namespace GBC_WebService
 {
@@ -17,9 +18,10 @@ namespace GBC_WebService
     [System.ComponentModel.ToolboxItem(false)]
     // 若要允許使用 ASP.NET AJAX 從指令碼呼叫此 Web 服務，請取消註解下列一行。
     // [System.Web.Script.Services.ScriptService]
+
     public class GBCWebService : System.Web.Services.WebService
     {
-
+       
         public void GBC_WebService()
         {
 
@@ -31,121 +33,96 @@ namespace GBC_WebService
         GBCAbateDAO abateDAO = new GBCAbateDAO();
 
         [WebMethod]
-        //JSON單筆測試
-        public string GetVw_GBCVisaDetail(string acmWordNum)
-        {
-
-            Vw_GBCVisaDetailVO vw_GBCVisaDetailVO = dao.findViewByAcmWordNum(acmWordNum);
-
-            Vw_GBCVisaDetail[] view = new Vw_GBCVisaDetail[] {
-            new Vw_GBCVisaDetail(){
-                PK_會計年度 = vw_GBCVisaDetailVO.getPK_會計年度(),
-                PK_動支編號 = vw_GBCVisaDetailVO.getPK_動支編號(),
-                PK_種類 = vw_GBCVisaDetailVO.getPK_種類(),
-                PK_次別 = vw_GBCVisaDetailVO.getPK_次別(),
-                PK_明細號 = vw_GBCVisaDetailVO.getPK_明細號(),
-                F_科室代碼 = vw_GBCVisaDetailVO.getF_科室代碼(),
-                F_用途別代碼 = vw_GBCVisaDetailVO.getF_用途別代碼(),
-                F_計畫代碼 = vw_GBCVisaDetailVO.getF_計畫代碼(),
-                F_動支金額 = vw_GBCVisaDetailVO.getF_動支金額(),
-                F_製票日 = vw_GBCVisaDetailVO.getF_製票日(),
-                F_是否核定 = vw_GBCVisaDetailVO.getF_是否核定(),
-                F_核定金額 = vw_GBCVisaDetailVO.getF_核定金額(),
-                F_核定日期 = vw_GBCVisaDetailVO.getF_核定日期(),
-                F_摘要 = vw_GBCVisaDetailVO.getF_摘要(),
-                F_受款人 = vw_GBCVisaDetailVO.getF_受款人(),
-                F_受款人編號 = vw_GBCVisaDetailVO.getF_受款人編號(),
-                F_批號 = vw_GBCVisaDetailVO.getF_批號()
-            }
-        };
-
-            return JsonConvert.SerializeObject(view);
-        }
-
-        [WebMethod]
-        //XML單筆測試
-        public Vw_GBCVisaDetail[] GetVw_GBCVisaDetailXML(string acmWordNum)
-        {
-
-            Vw_GBCVisaDetailVO vw_GBCVisaDetailVO = dao.findViewByAcmWordNum(acmWordNum);
-
-            Vw_GBCVisaDetail[] view = new Vw_GBCVisaDetail[] {
-            new Vw_GBCVisaDetail(){
-                PK_會計年度 = vw_GBCVisaDetailVO.getPK_會計年度(),
-                PK_動支編號 = vw_GBCVisaDetailVO.getPK_動支編號(),
-                PK_種類 = vw_GBCVisaDetailVO.getPK_種類(),
-                PK_次別 = vw_GBCVisaDetailVO.getPK_次別(),
-                PK_明細號 = vw_GBCVisaDetailVO.getPK_明細號(),
-                F_科室代碼 = vw_GBCVisaDetailVO.getF_科室代碼(),
-                F_用途別代碼 = vw_GBCVisaDetailVO.getF_用途別代碼(),
-                F_計畫代碼 = vw_GBCVisaDetailVO.getF_計畫代碼(),
-                F_動支金額 = vw_GBCVisaDetailVO.getF_動支金額(),
-                F_製票日 = vw_GBCVisaDetailVO.getF_製票日(),
-                F_是否核定 = vw_GBCVisaDetailVO.getF_是否核定(),
-                F_核定金額 = vw_GBCVisaDetailVO.getF_核定金額(),
-                F_核定日期 = vw_GBCVisaDetailVO.getF_核定日期(),
-                F_摘要 = vw_GBCVisaDetailVO.getF_摘要(),
-                F_受款人 = vw_GBCVisaDetailVO.getF_受款人(),
-                F_受款人編號 = vw_GBCVisaDetailVO.getF_受款人編號(),
-                F_批號 = vw_GBCVisaDetailVO.getF_批號()
-            }
-        };
-
-            return view;
-        }
-
-        [WebMethod]
-        //JSON集合
+        //JSON集合(導入EF方式)
         public string GetVw_GBCVisaDetailJSON(string acmWordNum)
         {
+            IQueryable<vw_GBCVisaDetailWithAbate> vw_gbcVisaDetailWithAbate = null;
+
             acmWordNum = acmWordNum.Trim(); //去空白
             acmWordNum = acmWordNum.Replace("*", ""); //去掉"*"字號
                                                       //Regex rx = new Regex(@"\*\d{8}-\d{1,2}-\d{1,2}\*"); //輸入規則:*10500001-1-1*
             Regex rx = new Regex(@"\d{8}-\d{1}-\d{1,3}$");  //輸入規則:10500001-1-1
             Match match = rx.Match(acmWordNum);
-            List<Vw_GBCVisaDetailVO> vw_GBCVisaDetailVO = dao.getAll(acmWordNum);
-            List<Vw_GBCVisaDetail> view = new List<Vw_GBCVisaDetail>();
+            List<Vw_GBCVisaDetail> vw_gbcVisaDetailWithAbateview = new List<Vw_GBCVisaDetail>();
 
-            if (vw_GBCVisaDetailVO.Count==0)
+            string accYear = (DateTime.Now.Year - 1911).ToString();
+            string[] strs = acmWordNum.Split('-'); //以"-"區分種類及次號
+            string acmWordNumOut = strs[0];
+            string acmKind = null;
+            switch (strs[1])
+            {
+                case "1":
+                    acmKind = "預付";
+                    break;
+                case "2":
+                    acmKind = "核銷";
+                    break;
+                case "3":
+                    acmKind = "估列";
+                    break;
+                case "4":
+                    acmKind = "估列收回";
+                    break;
+                case "5":
+                    acmKind = "預撥收回";
+                    break;
+                case "6":
+                    acmKind = "核銷收回";
+                    break;
+                default:
+                    acmKind = "無";
+                    break;
+            }
+            string acmNo = strs[2];
+
+            //尋找是否有原動支編號           
+            int isOrigNum = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.F_原動支編號 == acmWordNumOut).Count();
+
+            if (int.Parse(acmWordNumOut.Substring(0, 3)) < DateTime.Now.Year - 1911)
+            {
+                if (isOrigNum > 0)
+                {
+                    vw_gbcVisaDetailWithAbate = dao.getAllWithAbate(x =>
+                        x.PK_會計年度 == accYear &&
+                        x.F_原動支編號 == acmWordNumOut &&
+                        x.PK_種類 == acmKind &&
+                        x.PK_次別 == acmNo
+                        );
+                }
+                else
+                {
+                    vw_gbcVisaDetailWithAbate = dao.getAllWithAbate(x =>
+                        x.PK_會計年度 == accYear &&
+                        x.PK_動支編號 == acmWordNumOut &&
+                        x.PK_種類 == acmKind &&
+                        x.PK_次別 == acmNo
+                        );
+                }
+
+            }
+            else
+            {
+                vw_gbcVisaDetailWithAbate = dao.getAllWithAbate(x =>
+                    x.PK_會計年度 == accYear &&
+                    x.PK_動支編號 == acmWordNumOut &&
+                    x.PK_種類 == acmKind &&
+                    x.PK_次別 == acmNo
+                    );
+            }
+
+
+            if ((vw_gbcVisaDetailWithAbate.Count()) == 0)
             {
                 return acmWordNum + "..查無此資料可就源，請確認是否已審核";
             }
             if (match.Success)
             {
-                foreach (var item in vw_GBCVisaDetailVO)
-                {
-                    view.Add(
-                        new Vw_GBCVisaDetail()
-                        {
-                            基金代碼 = item.get基金代碼(),
-                            PK_會計年度 = item.getPK_會計年度(),
-                            PK_動支編號 = item.getPK_動支編號(),
-                            PK_種類 = item.getPK_種類(),
-                            PK_次別 = item.getPK_次別(),
-                            PK_明細號 = item.getPK_明細號(),
-                            F_科室代碼 = item.getF_科室代碼(),
-                            F_用途別代碼 = item.getF_用途別代碼(),
-                            F_計畫代碼 = item.getF_計畫代碼(),
-                            F_動支金額 = item.getF_動支金額(),
-                            F_製票日 = item.getF_製票日(),
-                            F_是否核定 = item.getF_是否核定(),
-                            F_核定金額 = item.getF_核定金額(),
-                            F_核定日期 = item.getF_核定日期(),
-                            F_摘要 = item.getF_摘要(),
-                            F_受款人 = item.getF_受款人(),
-                            F_受款人編號 = item.getF_受款人編號(),
-                            F_批號 = item.getF_批號(),
-                            F_原動支編號 = item.getF_原動支編號()
-                        }
-                    );
-                }
+                return JsonConvert.SerializeObject(vw_gbcVisaDetailWithAbate);
             }
             else
             {
                 return JsonConvert.SerializeObject("輸入格式錯誤");
             }
-
-            return JsonConvert.SerializeObject(view);
         }
 
         [WebMethod]
@@ -182,48 +159,15 @@ namespace GBC_WebService
             return "xxx";
         }
 
-        //[WebMethod]
-        ////回填傳票號碼
-        //public string FillVouNoJSON(string fillVouJSON)
-        //{
-        //    //string PK_會計年度, string PK_動支編號, string PK_種類, string PK_次別, string PK_明細號, string F_金額, string F_製票號, string F_製票日期
-        //    //List<GBCAbateVO> gbcAbateVOList = new List<GBCAbateVO>();
-        //    GBCAbateVO gbcAbateVO = new GBCAbateVO();
-        //    List<FillVouScript> fillVouScriptList = new List<FillVouScript>();
-        //    try
-        //    {
-        //        fillVouScriptList = JsonConvert.DeserializeObject<List<FillVouScript>>(fillVouJSON);  //反序列化JSON
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return e.StackTrace;
-        //    }
-
-        //    foreach (var fillVouScriptListItem in fillVouScriptList)
-        //    {
-        //        gbcAbateVO.PK_會計年度 = fillVouScriptListItem.會計年度;
-        //        gbcAbateVO.PK_動支編號 = fillVouScriptListItem.動支編號;
-        //        gbcAbateVO.PK_種類 = fillVouScriptListItem.種類;
-        //        gbcAbateVO.PK_次別 = fillVouScriptListItem.次別;
-        //        gbcAbateVO.PK_明細號 = fillVouScriptListItem.明細號;
-        //        gbcAbateVO.F_製票號 = fillVouScriptListItem.傳票號;
-        //        gbcAbateVO.F_製票日期 = fillVouScriptListItem.製票日期;
-        //        gbcAbateVO.F_過帳號 = fillVouScriptListItem.傳票號;
-        //        gbcAbateVO.F_過帳日期 = fillVouScriptListItem.製票日期;
-
-        //        abateDAO.Delete(gbcAbateVO);
-        //        abateDAO.Insert(gbcAbateVO);
-        //    }
-
-        //    return "xxx";
-        //}
-
         //=================手動選取資料=================
+
         [WebMethod]
         //取年度
         public List<string> GetYear()
         {
-            List<string> yearList = new List<string>(dao.GetYear());
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => 1 == 1);
+            var yearList = (from s1 in getAllWithAbate select s1.PK_會計年度).Distinct().OrderByDescending(o => o).ToList();
+
             return yearList;
         }
 
@@ -231,9 +175,8 @@ namespace GBC_WebService
         //取動支編號
         public List<string> GetAcmWordNum(string accYear)
         {
-            List<string> acmNoList = new List<string>(
-                dao.GetAcmWordNum(accYear)
-                );
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear);
+            var acmNoList = (from s1 in getAllWithAbate select s1.PK_動支編號).Distinct().OrderByDescending(o => o).ToList();
 
             return acmNoList;
         }
@@ -242,9 +185,9 @@ namespace GBC_WebService
         //取種類
         public List<string> GetAccKind(string accYear, string acmWordNum)
         {
-            List<string> accKindList = new List<string>(
-                dao.GetAccKind(accYear, acmWordNum)
-                );
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_動支編號 == acmWordNum);
+            var accKindList = (from s1 in getAllWithAbate select s1.PK_種類).Distinct().ToList();
+
             return accKindList;
         }
 
@@ -252,9 +195,9 @@ namespace GBC_WebService
         //取次數
         public List<string> GetAccCount(string accYear, string acmWordNum, string accKind)
         {
-            List<string> accCountList = new List<string>(
-                dao.GetAccCount(accYear, acmWordNum, accKind)
-                );
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_動支編號 == acmWordNum && x.PK_種類 == accKind);
+            var accCountList = (from s1 in getAllWithAbate select s1.PK_次別).Distinct().ToList();
+
             return accCountList;
         }
 
@@ -262,9 +205,9 @@ namespace GBC_WebService
         //取明細號
         public List<string> GetAccDetail(string accYear, string acmWordNum, string accKind, string accCount)
         {
-            List<string> accDetailList = new List<string>(
-                dao.GetAccDetail(accYear, acmWordNum, accKind, accCount)
-                );
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_動支編號 == acmWordNum && x.PK_種類 == accKind && x.PK_次別 == accCount);
+            var accDetailList = (from s1 in getAllWithAbate select s1.PK_明細號).Distinct().ToList();
+
             return accDetailList;
         }
 
@@ -272,7 +215,12 @@ namespace GBC_WebService
         //依據所有KEY值取View
         public string GetByPrimaryKey(string accYear, string acmWordNum, string accKind, string accCount, string accDetail)
         {
-            string getGBCVisaDetail = dao.GetByPrimaryKey(accYear, acmWordNum, accKind, accCount, accDetail);
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_動支編號 == acmWordNum && x.PK_種類 == accKind && x.PK_次別 == accCount && x.PK_明細號 == accDetail);
+            var result = (from s1 in getAllWithAbate select s1).FirstOrDefault();
+
+            string getGBCVisaDetail = "";
+            getGBCVisaDetail = result.基金代碼 + "," + result.PK_會計年度 + "," + result.PK_動支編號 + "," + result.PK_種類 + "," + result.PK_次別 + "," + result.PK_明細號 + "," + result.F_科室代碼 + "," + result.F_用途別代碼 + "," + result.F_計畫代碼 + "," + result.F_動支金額.ToString() + "," + result.F_製票日 + "," + result.F_摘要 + "," + result.F_受款人 + "," + result.F_受款人編號 + "," + result.實支.ToString() + "," + result.預付轉正.ToString() + "," + result.沖抵估列.ToString();
+
             return getGBCVisaDetail;
         }
 
@@ -280,9 +228,39 @@ namespace GBC_WebService
         //取種類View
         public List<string> GetByKind(string accYear, string accKind, string batch)
         {
-            List<string> vw_GBCVisaDetailVO = dao.GetByKind(accYear, accKind, batch);
+            List<string> list = new List<string>();
+            string kindNo = "";
 
-            return vw_GBCVisaDetailVO;
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_種類 == accKind && x.F_批號 == batch);
+            var result = (from s1 in getAllWithAbate select new { s1.基金代碼, s1.PK_會計年度, s1.PK_動支編號, s1.PK_種類, s1.PK_次別 } ).Distinct().ToList();
+
+            foreach (var resultItem in result)
+            {
+                kindNo = resultItem.PK_種類;
+
+                switch (kindNo)
+                {
+                    case "估列":
+                        kindNo = "3";
+                        break;
+                    case "估列收回":
+                        kindNo = "4";
+                        break;
+                    case "預撥收回":
+                        kindNo = "5";
+                        break;
+                    case "核銷收回":
+                        kindNo = "6";
+                        break;
+                    default:
+                        kindNo = "0";
+                        break;
+                }
+
+                list.Add(resultItem.PK_動支編號 + "-" + kindNo + "-" + resultItem.PK_次別);
+            }
+            
+            return list;
         }
 
     }

@@ -27,4 +27,7 @@ public class Vw_GBCVisaDetail
     public String F_受款人編號 { get; set; }
     public String F_原動支編號 { get; set; }
     public String F_批號 { get; set; }
+    public string 實支 { get; set; }
+    public string 預付轉正 { get; set; }
+    public string 沖抵估列 { get; set; }
 }
