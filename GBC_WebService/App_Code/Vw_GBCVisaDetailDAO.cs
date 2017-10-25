@@ -423,7 +423,9 @@ public class Vw_GBCVisaDetailDAO
     public IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate(Expression<Func<vw_GBCVisaDetailWithAbate, bool>> condition)
     {
         var result = from s1 in db.vw_GBCVisaDetailWithAbate select s1;
+
         return result.Where(condition);
     }
+
 
 }

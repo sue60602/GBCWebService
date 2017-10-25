@@ -3200,9 +3200,6 @@
         <EntityType Name="vw_GBCVisaDetailWithAbate">
           <Key>
             <PropertyRef Name="基金代碼" />
-            <PropertyRef Name="實支" />
-            <PropertyRef Name="預付轉正" />
-            <PropertyRef Name="沖抵估列" />
           </Key>
           <Property Name="基金代碼" Type="varchar" MaxLength="3" Nullable="false" />
           <Property Name="PK_會計年度" Type="varchar" MaxLength="3" />
@@ -3223,9 +3220,10 @@
           <Property Name="F_受款人編號" Type="varchar" MaxLength="20" />
           <Property Name="F_原動支編號" Type="varchar" MaxLength="20" />
           <Property Name="F_批號" Type="varchar" MaxLength="10" />
-          <Property Name="實支" Type="money" Nullable="false" />
-          <Property Name="預付轉正" Type="money" Nullable="false" />
-          <Property Name="沖抵估列" Type="money" Nullable="false" />
+          <Property Name="實支" Type="float" />
+          <Property Name="預付轉正" Type="float" />
+          <Property Name="沖抵估列" Type="float" />
+          <Property Name="費用" Type="float" />
         </EntityType>
         <Association Name="FK_tsbApplyDtl_tsbApply">
           <End Role="tsbApply" Type="Self.tsbApply" Multiplicity="1" />
@@ -3714,7 +3712,8 @@ FROM [dbo].[GBCVisaDetail] AS [GBCVisaDetail]</DefiningQuery>
 [vw_GBCVisaDetailWithAbate].[F_批號] AS [F_批號], 
 [vw_GBCVisaDetailWithAbate].[實支] AS [實支], 
 [vw_GBCVisaDetailWithAbate].[預付轉正] AS [預付轉正], 
-[vw_GBCVisaDetailWithAbate].[沖抵估列] AS [沖抵估列]
+[vw_GBCVisaDetailWithAbate].[沖抵估列] AS [沖抵估列], 
+[vw_GBCVisaDetailWithAbate].[費用] AS [費用]
 FROM [dbo].[vw_GBCVisaDetailWithAbate] AS [vw_GBCVisaDetailWithAbate]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_tsbApplyDtl_tsbApply" Association="Self.FK_tsbApplyDtl_tsbApply">
@@ -7442,9 +7441,6 @@ FROM [dbo].[vw_GBCVisaDetailWithAbate] AS [vw_GBCVisaDetailWithAbate]</DefiningQ
         <EntityType Name="vw_GBCVisaDetailWithAbate">
           <Key>
             <PropertyRef Name="基金代碼" />
-            <PropertyRef Name="實支" />
-            <PropertyRef Name="預付轉正" />
-            <PropertyRef Name="沖抵估列" />
           </Key>
           <Property Name="基金代碼" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="PK_會計年度" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
@@ -7465,9 +7461,10 @@ FROM [dbo].[vw_GBCVisaDetailWithAbate] AS [vw_GBCVisaDetailWithAbate]</DefiningQ
           <Property Name="F_受款人編號" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="F_原動支編號" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="F_批號" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="實支" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="預付轉正" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="沖抵估列" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="實支" Type="Double" />
+          <Property Name="預付轉正" Type="Double" />
+          <Property Name="沖抵估列" Type="Double" />
+          <Property Name="費用" Type="Double" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -10623,6 +10620,7 @@ FROM [dbo].[vw_GBCVisaDetailWithAbate] AS [vw_GBCVisaDetailWithAbate]</DefiningQ
           <EntitySetMapping Name="vw_GBCVisaDetailWithAbate">
             <EntityTypeMapping TypeName="MOHWFGBCEModel.vw_GBCVisaDetailWithAbate">
               <MappingFragment StoreEntitySet="vw_GBCVisaDetailWithAbate">
+                <ScalarProperty Name="費用" ColumnName="費用" />
                 <ScalarProperty Name="沖抵估列" ColumnName="沖抵估列" />
                 <ScalarProperty Name="預付轉正" ColumnName="預付轉正" />
                 <ScalarProperty Name="實支" ColumnName="實支" />

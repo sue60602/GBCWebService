@@ -33,8 +33,9 @@ namespace GBC_WebService.EF
         public string F_受款人編號 { get; set; }
         public string F_原動支編號 { get; set; }
         public string F_批號 { get; set; }
-        public decimal 實支 { get; set; }
-        public decimal 預付轉正 { get; set; }
-        public decimal 沖抵估列 { get; set; }
+        public Nullable<double> 實支 { get; set; }
+        public Nullable<double> 預付轉正 { get; set; }
+        public Nullable<double> 沖抵估列 { get; set; }
+        public Nullable<double> 費用 { get; set; }
     }
 }

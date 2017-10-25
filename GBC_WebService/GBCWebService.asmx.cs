@@ -43,7 +43,7 @@ namespace GBC_WebService
                                                       //Regex rx = new Regex(@"\*\d{8}-\d{1,2}-\d{1,2}\*"); //輸入規則:*10500001-1-1*
             Regex rx = new Regex(@"\d{8}-\d{1}-\d{1,3}$");  //輸入規則:10500001-1-1
             Match match = rx.Match(acmWordNum);
-            List<Vw_GBCVisaDetail> vw_gbcVisaDetailWithAbateview = new List<Vw_GBCVisaDetail>();
+            List<vw_GBCVisaDetailWithAbate> vw_gbcVisaDetailWithAbateView = new List<vw_GBCVisaDetailWithAbate>();
 
             string accYear = (DateTime.Now.Year - 1911).ToString();
             string[] strs = acmWordNum.Split('-'); //以"-"區分種類及次號
@@ -110,14 +110,59 @@ namespace GBC_WebService
                     );
             }
 
-
-            if ((vw_gbcVisaDetailWithAbate.Count()) == 0)
+            var view = (vw_gbcVisaDetailWithAbate.Select(x => new { x.基金代碼, x.PK_會計年度, x.PK_動支編號, x.PK_種類, x.PK_次別, x.PK_明細號, x.F_科室代碼, x.F_用途別代碼, x.F_計畫代碼, x.F_動支金額, x.F_製票日, F_是否核定 = x.F_是否核定, x.F_核定金額, x.F_核定日期, x.F_摘要, x.F_受款人, x.F_受款人編號, x.F_原動支編號, x.F_批號, x.實支, x.費用, x.預付轉正, x.沖抵估列 })
+                .ToList()
+                .Select(s1 => new vw_GBCVisaDetailWithAbate
+                {
+                    基金代碼 = s1.基金代碼,
+                    PK_會計年度 = s1.PK_會計年度,
+                    PK_動支編號 = s1.PK_動支編號,
+                    PK_種類 = s1.PK_種類,
+                    PK_次別 = s1.PK_次別,
+                    PK_明細號 = s1.PK_明細號,
+                    F_科室代碼 = s1.F_科室代碼,
+                    F_用途別代碼 = s1.F_用途別代碼,
+                    F_計畫代碼 = s1.F_計畫代碼,
+                    F_動支金額 = s1.F_動支金額,
+                    F_製票日 = s1.F_製票日,
+                    F_是否核定 = s1.F_是否核定,
+                    F_核定金額 = s1.F_核定金額,
+                    F_核定日期 = s1.F_核定日期,
+                    F_摘要 = s1.F_摘要,
+                    F_受款人 = s1.F_受款人,
+                    F_受款人編號 = s1.F_受款人編號,
+                    F_原動支編號 = s1.F_原動支編號,
+                    F_批號 = s1.F_批號,
+                    實支 = s1.實支,
+                    費用 = s1.費用,
+                    預付轉正 = s1.預付轉正,
+                    沖抵估列 = s1.沖抵估列
+                })).ToList();
+                        
+            if ((view.Count()) == 0)
             {
                 return acmWordNum + "..查無此資料可就源，請確認是否已審核";
             }
             if (match.Success)
             {
-                return JsonConvert.SerializeObject(vw_gbcVisaDetailWithAbate);
+                foreach (var viewItem in view)
+                {
+                    viewItem.F_用途別代碼 = (viewItem.F_用途別代碼).Substring(2);
+
+                    if ((viewItem.F_計畫代碼).Length > 2)
+                    {
+                        viewItem.F_計畫代碼 = (viewItem.F_計畫代碼).Substring(7);
+                    }
+                    else
+                    {
+                        viewItem.F_計畫代碼 = viewItem.F_計畫代碼;
+                    }
+
+                    vw_gbcVisaDetailWithAbateView.Add(viewItem);
+
+                }
+
+                return JsonConvert.SerializeObject(vw_gbcVisaDetailWithAbateView);
             }
             else
             {
@@ -232,8 +277,7 @@ namespace GBC_WebService
             string kindNo = "";
 
             IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_種類 == accKind && x.F_批號 == batch);
-            var result = (from s1 in getAllWithAbate select new { s1.基金代碼, s1.PK_會計年度, s1.PK_動支編號, s1.PK_種類, s1.PK_次別 } ).Distinct().ToList();
-
+            var result = (from s1 in getAllWithAbate select new { s1.基金代碼, s1.PK_會計年度, s1.PK_動支編號, s1.PK_種類, s1.PK_次別 }).ToList().Distinct();
             foreach (var resultItem in result)
             {
                 kindNo = resultItem.PK_種類;
