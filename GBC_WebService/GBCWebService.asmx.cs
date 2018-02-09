@@ -77,7 +77,8 @@ namespace GBC_WebService
 
             //尋找是否有原動支編號           
             int isOrigNum = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.F_原動支編號 == acmWordNumOut).Count();
-
+            int isEstimate = dao.getAllWithAbate(x => x.PK_動支編號 == acmWordNumOut && x.PK_種類=="估列").Count();
+            int isPrepayBeforeYear = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_動支編號 == acmWordNumOut && x.PK_種類 == "預付").Count();
             if (int.Parse(acmWordNumOut.Substring(0, 3)) < DateTime.Now.Year - 1911)
             {
                 if (isOrigNum > 0)
@@ -89,10 +90,28 @@ namespace GBC_WebService
                         x.PK_次別 == acmNo
                         );
                 }
+                else if (isEstimate > 0 && (acmKind=="核銷" || acmKind == "估列收回") )
+                {
+                    vw_gbcVisaDetailWithAbate = dao.getAllWithAbate(x =>
+                    x.PK_會計年度 == accYear &&
+                    x.PK_動支編號 == acmWordNumOut &&
+                    x.PK_種類 == acmKind &&
+                    x.PK_次別 == acmNo
+                    );
+                }
+                else if(isPrepayBeforeYear > 0)
+                {
+                    vw_gbcVisaDetailWithAbate = dao.getAllWithAbate(x =>
+                    x.PK_會計年度 == accYear &&
+                    x.PK_動支編號 == acmWordNumOut &&
+                    x.PK_種類 == acmKind &&
+                    x.PK_次別 == acmNo
+                    );
+                }
                 else
                 {
                     vw_gbcVisaDetailWithAbate = dao.getAllWithAbate(x =>
-                        x.PK_會計年度 == accYear &&
+                        x.PK_會計年度 == acmWordNumOut.Substring(0, 3) &&
                         x.PK_動支編號 == acmWordNumOut &&
                         x.PK_種類 == acmKind &&
                         x.PK_次別 == acmNo
@@ -103,7 +122,7 @@ namespace GBC_WebService
             else
             {
                 vw_gbcVisaDetailWithAbate = dao.getAllWithAbate(x =>
-                    x.PK_會計年度 == accYear &&
+                    x.PK_會計年度 == acmWordNumOut.Substring(0, 3) &&
                     x.PK_動支編號 == acmWordNumOut &&
                     x.PK_種類 == acmKind &&
                     x.PK_次別 == acmNo
@@ -151,7 +170,16 @@ namespace GBC_WebService
 
                     if ((viewItem.F_計畫代碼).Length > 2)
                     {
-                        viewItem.F_計畫代碼 = (viewItem.F_計畫代碼).Substring(7);
+                        //菸金的代碼不同，需特殊處理
+                        if (viewItem.基金代碼=="040")
+                        {
+                            viewItem.F_計畫代碼 = (viewItem.F_計畫代碼).Substring(4,6);
+                        }
+                        else
+                        {
+                            viewItem.F_計畫代碼 = (viewItem.F_計畫代碼).Substring(7);
+                        }
+                        
                     }
                     else
                     {
@@ -161,7 +189,6 @@ namespace GBC_WebService
                     vw_gbcVisaDetailWithAbateView.Add(viewItem);
 
                 }
-
                 return JsonConvert.SerializeObject(vw_gbcVisaDetailWithAbateView);
             }
             else
@@ -258,9 +285,9 @@ namespace GBC_WebService
 
         [WebMethod]
         //依據所有KEY值取View
-        public string GetByPrimaryKey(string accYear, string acmWordNum, string accKind, string accCount, string accDetail)
+        public string GetByPrimaryKey(string accYear, string acmWordNum, string accKind, string accCount)
         {
-            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_動支編號 == acmWordNum && x.PK_種類 == accKind && x.PK_次別 == accCount && x.PK_明細號 == accDetail);
+            IQueryable<vw_GBCVisaDetailWithAbate> getAllWithAbate = dao.getAllWithAbate(x => x.PK_會計年度 == accYear && x.PK_動支編號 == acmWordNum && x.PK_種類 == accKind && x.PK_次別 == accCount);
             var result = (from s1 in getAllWithAbate select s1).FirstOrDefault();
 
             string getGBCVisaDetail = "";
