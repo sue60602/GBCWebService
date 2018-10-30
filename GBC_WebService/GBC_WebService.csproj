@@ -136,7 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="GBCWebService.asmx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\GBCAbateDAO.cs" />
@@ -518,6 +520,7 @@
     <Compile Include="App_Code\Vw_GBCVisaDetailDAO.cs" />
     <Compile Include="App_Code\Vw_GBCVisaDetailVO.cs" />
     <Compile Include="App_Code\Vw_GBCVisaDetail_Interface.cs" />
+    <Compile Include="App_Code\TsbEstimateDAO.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
